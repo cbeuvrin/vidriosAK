@@ -1,0 +1,10 @@
+node_modules/
+app/node_modules/
+app/dist/
+.DS_Store
+video_frames/
+video_frames2/
+*.png
+!app/public/*.png
+.env
+.env.local
