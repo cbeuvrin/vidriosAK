@@ -14,6 +14,7 @@ const Products = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredId, setHoveredId] = useState<number | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -31,6 +32,36 @@ const Products = () => {
     }
 
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    let animationFrameId: number;
+    let lastScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+
+      const rect = sectionRef.current.getBoundingClientRect();
+      // Distance from center of element to center of viewport
+      const centerDistance = (rect.top + rect.height / 2) - (window.innerHeight / 2);
+
+      setScrollProgress(centerDistance);
+    };
+
+    const onScroll = () => {
+      if (Math.abs(window.scrollY - lastScrollY) > 0) {
+        lastScrollY = window.scrollY;
+        animationFrameId = requestAnimationFrame(handleScroll);
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(animationFrameId);
+    };
   }, []);
 
   const products: Product[] = [
@@ -76,110 +107,131 @@ const Products = () => {
     <section
       id="products"
       ref={sectionRef}
-      className="relative w-full py-24 lg:py-32 bg-dark-light"
+      className="relative w-full py-24 lg:py-40 bg-dark-light overflow-hidden"
     >
-      <div className="w-full px-6 lg:px-12">
+      <div className="w-full px-6 lg:px-12 relative z-10">
         {/* Header */}
-        <div className="mb-16">
+        <div className="mb-20 text-center md:text-left ml-0 md:ml-4 lg:ml-12">
           <div
-            className={`mb-4 transition-all duration-700 ${isVisible
+            className={`mb-4 transition-all duration-1000 ${isVisible
               ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-4'
+              : 'opacity-0 translate-y-8'
               }`}
           >
-            <span className="text-xs tracking-[0.3em] uppercase text-gold">
-              Nuestros Productos
-            </span>
+            <div style={{ transform: `translateY(${scrollProgress * 0.05}px)` }}>
+              <span className="text-xs tracking-[0.3em] uppercase text-gold">
+                Nuestros Productos
+              </span>
+            </div>
           </div>
-          <h2
-            className={`text-3xl lg:text-4xl xl:text-5xl font-light text-white transition-all duration-700 ${isVisible
+          <div
+            className={`transition-all duration-1000 ${isVisible
               ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-6'
+              : 'opacity-0 translate-y-8'
               }`}
             style={{ transitionDelay: '200ms' }}
           >
-            Soluciones en <span className="text-gold">Vidrio</span>
-          </h2>
+            <h2
+              className="text-4xl lg:text-5xl xl:text-6xl font-light text-white"
+              style={{ transform: `translateY(${scrollProgress * 0.02}px)` }}
+            >
+              Soluciones en <span className="text-gold">Vidrio</span>
+            </h2>
+          </div>
         </div>
 
         {/* Products Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
-          {products.map((product, index) => (
-            <div
-              key={product.id}
-              className={`group relative overflow-hidden rounded-sm cursor-pointer transition-all duration-700 ${isVisible
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-                }`}
-              style={{ transitionDelay: `${300 + index * 100}ms` }}
-              onMouseEnter={() => setHoveredId(product.id)}
-              onMouseLeave={() => setHoveredId(null)}
-            >
-              {/* Image */}
-              <div className="aspect-[3/4] overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  className={`w-full h-full object-cover transition-transform duration-700 ${hoveredId === product.id ? 'scale-110' : 'scale-100'
-                    }`}
-                />
-              </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 lg:gap-16 max-w-6xl mx-auto">
+          {products.map((product, index) => {
+            const parallaxSpeeds = [0.03, 0.08, 0.05, 0.1];
 
-              {/* Overlay */}
+            return (
               <div
-                className={`absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent transition-opacity duration-500 ${hoveredId === product.id ? 'opacity-90' : 'opacity-70'
+                key={product.id}
+                className={`transition-all duration-1000 ${isVisible
+                  ? 'opacity-100 translate-y-0'
+                  : 'opacity-0 translate-y-16'
                   }`}
-              />
-
-              {/* Content */}
-              <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                {/* Icon */}
+                style={{ transitionDelay: `${300 + index * 100}ms` }}
+              >
                 <div
-                  className={`mb-4 text-gold transition-all duration-500 ${hoveredId === product.id
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-4'
-                    }`}
+                  className="group relative overflow-hidden rounded-sm cursor-pointer h-full"
+                  style={{ transform: `translateY(${scrollProgress * parallaxSpeeds[index]}px)` }}
+                  onMouseEnter={() => setHoveredId(product.id)}
+                  onMouseLeave={() => setHoveredId(null)}
                 >
-                  {product.icon}
-                </div>
+                  {/* Image */}
+                  <div className="aspect-[3/4] overflow-hidden bg-dark">
+                    <div
+                      className="w-full h-full"
+                      style={{ transform: `translateY(${scrollProgress * -0.05}px) scale(1.15)` }}
+                    >
+                      <img
+                        src={product.image}
+                        alt={product.title}
+                        className={`w-full h-full object-cover transition-transform duration-1000 ease-out ${hoveredId === product.id ? 'scale-110' : 'scale-100'
+                          }`}
+                      />
+                    </div>
+                  </div>
 
-                {/* Title */}
-                <h3 className="text-xl lg:text-2xl font-light text-white mb-1">
-                  {product.title}
-                </h3>
+                  {/* Overlay */}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/40 to-transparent transition-opacity duration-700 ${hoveredId === product.id ? 'opacity-90' : 'opacity-70'
+                      }`}
+                  />
 
-                {/* Subtitle */}
-                <p className="text-sm text-gold mb-3">{product.subtitle}</p>
+                  {/* Content */}
+                  <div className="absolute inset-0 p-8 lg:p-10 flex flex-col justify-end">
+                    {/* Icon */}
+                    <div
+                      className={`mb-4 text-gold transition-all duration-700 ease-out ${hoveredId === product.id
+                        ? 'opacity-100 translate-y-0 scale-110'
+                        : 'opacity-0 translate-y-6 scale-95'
+                        }`}
+                    >
+                      {product.icon}
+                    </div>
 
-                {/* Description - Shows on hover */}
-                <p
-                  className={`text-sm text-white/70 mb-4 line-clamp-2 transition-all duration-500 ${hoveredId === product.id
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-4'
-                    }`}
-                >
-                  {product.description}
-                </p>
+                    {/* Title */}
+                    <h3 className="text-2xl lg:text-3xl font-light text-white mb-2 transition-transform duration-500 group-hover:-translate-y-1">
+                      {product.title}
+                    </h3>
 
-                {/* CTA */}
-                <div
-                  className={`flex items-center gap-2 text-sm text-white group-hover:text-gold transition-all duration-500 ${hoveredId === product.id
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-4'
-                    }`}
-                >
-                  <span>Ver más</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                    {/* Subtitle */}
+                    <p className="text-sm tracking-wide text-gold mb-4 transition-transform duration-500 group-hover:-translate-y-1">{product.subtitle}</p>
+
+                    {/* Description - Shows on hover */}
+                    <p
+                      className={`text-sm md:text-base text-white/80 mb-6 line-clamp-3 transition-all duration-700 ease-out ${hoveredId === product.id
+                        ? 'opacity-100 translate-y-0'
+                        : 'opacity-0 translate-y-8'
+                        }`}
+                    >
+                      {product.description}
+                    </p>
+
+                    {/* CTA */}
+                    <div
+                      className={`flex items-center gap-3 text-sm tracking-wider uppercase text-white transition-all duration-700 ease-out ${hoveredId === product.id
+                        ? 'opacity-100 translate-y-0 text-gold'
+                        : 'opacity-0 translate-y-8'
+                        }`}
+                    >
+                      <span>Ver detalles</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-3 transition-transform duration-500" />
+                    </div>
+                  </div>
+
+                  {/* Border glow on hover */}
+                  <div
+                    className={`absolute inset-0 border border-gold/0 rounded-sm transition-all duration-700 ${hoveredId === product.id ? 'border-gold/40 shadow-[inset_0_0_40px_rgba(212,175,55,0.1)]' : ''
+                      }`}
+                  />
                 </div>
               </div>
-
-              {/* Border glow on hover */}
-              <div
-                className={`absolute inset-0 border border-gold/0 rounded-sm transition-all duration-500 ${hoveredId === product.id ? 'border-gold/50' : ''
-                  }`}
-              />
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
