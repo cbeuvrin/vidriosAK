@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Phone, ChevronDown } from 'lucide-react';
+import { useLanguage } from '../lib/LanguageContext';
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     setIsVisible(true);
@@ -79,7 +81,7 @@ const Hero = () => {
             style={{ transitionDelay: '200ms' }}
           >
             <span className="text-xs tracking-[0.3em] uppercase text-gold">
-              Fábrica de Vidrio Arquitectónico
+              {t.hero.badge}
             </span>
           </div>
 
@@ -93,7 +95,7 @@ const Hero = () => {
               }`}
               style={{ transitionDelay: '400ms' }}
             >
-              VIDRIO <span className="font-medium text-gold">BLINDADO</span>
+              {t.hero.title1} <span className="font-medium text-gold">{t.hero.titleHighlight}</span>
             </span>
             <span
               className={`block text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-light text-white tracking-tight leading-none mt-2 transition-all duration-700 ${
@@ -103,7 +105,7 @@ const Hero = () => {
               }`}
               style={{ transitionDelay: '600ms' }}
             >
-              ARQUITECTÓNICO
+              {t.hero.title2}
             </span>
           </h1>
 
@@ -116,8 +118,7 @@ const Hero = () => {
             }`}
             style={{ transitionDelay: '800ms' }}
           >
-            18 años de experiencia protegiendo lo que más valoras. Tecnología de
-            vanguardia, seguridad incomparable.
+            {t.hero.description}
           </p>
 
           {/* CTA Buttons */}
@@ -133,7 +134,7 @@ const Hero = () => {
               onClick={scrollToProducts}
               className="group flex items-center gap-3 px-8 py-4 bg-gold text-dark font-medium rounded-sm hover:bg-gold-light transition-all duration-300 hover:shadow-glow-lg"
             >
-              Ver Productos
+              {t.hero.viewProducts}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
             <button
@@ -141,7 +142,7 @@ const Hero = () => {
               className="group flex items-center gap-3 px-8 py-4 border border-white/30 text-white font-medium rounded-sm hover:border-gold hover:text-gold transition-all duration-300"
             >
               <Phone className="w-5 h-5" />
-              Contáctanos
+              {t.hero.contactUs}
             </button>
           </div>
         </div>
@@ -155,7 +156,7 @@ const Hero = () => {
         style={{ transitionDelay: '1200ms' }}
       >
         <span className="text-xs text-white/50 tracking-wider uppercase">
-          Scroll
+          {t.hero.scroll}
         </span>
         <ChevronDown className="w-5 h-5 text-white/50 animate-bounce-subtle" />
       </div>

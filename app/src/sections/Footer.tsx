@@ -1,29 +1,31 @@
 import { Facebook, Instagram, Linkedin, ArrowUp } from 'lucide-react';
+import { useLanguage } from '../lib/LanguageContext';
 
 const Footer = () => {
+  const { t } = useLanguage();
+  
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const productLinks = [
-    { label: 'Vidrio Blindado', href: '#products' },
-    { label: 'Vidrio Laminado', href: '#products' },
-    { label: 'Vidrio Templado', href: '#products' },
-    { label: 'Vidrio Anti-huracán', href: '#products' },
+    { label: t.products.items[0].title, href: '#products' },
+    { label: t.products.items[1].title, href: '#products' },
+    { label: t.products.items[2].title, href: '#products' },
   ];
 
   const companyLinks = [
-    { label: 'Nosotros', href: '#about' },
-    { label: 'Certificaciones', href: '#about' },
-    { label: 'Proceso', href: '#about' },
-    { label: 'Proyectos', href: '#products' },
+    { label: t.nav.about, href: '#about' },
+    { label: t.footer.links.certifications, href: '#about' },
+    { label: t.footer.links.process, href: '#about' },
+    { label: t.footer.links.projects, href: '#products' },
   ];
 
   const supportLinks = [
-    { label: 'FAQ', href: '#' },
-    { label: 'Instalación', href: '#' },
-    { label: 'Garantía', href: '#' },
-    { label: 'Contacto', href: '#contact' },
+    { label: t.footer.links.faq, href: '#' },
+    { label: t.footer.links.installation, href: '#' },
+    { label: t.footer.links.warranty, href: '#' },
+    { label: t.nav.contact, href: '#contact' },
   ];
 
   const socialLinks = [
@@ -47,12 +49,12 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="lg:col-span-2 relative z-50">
             <a href="#hero" className="inline-block mb-6 transition-opacity duration-300 hover:opacity-80 relative z-50">
-              <img src="/logo-vidrio.png" alt="Vidrio AK Logo" className="h-14 lg:h-16 w-auto object-contain relative z-50" />
+              <div className="bg-white p-3 rounded-sm shadow-sm inline-block">
+                <img src="/logo3sk.png" alt="Vidrio AK Logo" className="h-14 lg:h-16 w-auto object-contain relative z-50" />
+              </div>
             </a>
             <p className="text-white/60 mb-6 max-w-sm leading-relaxed">
-              Seguridad y elegancia en cada proyecto. 18 años de experiencia
-              fabricando vidrios blindados y arquitectónicos de la más alta
-              calidad.
+              {t.footer.brandDesc}
             </p>
             {/* Social Links */}
             <div className="flex gap-4">
@@ -72,7 +74,7 @@ const Footer = () => {
           {/* Products Column */}
           <div>
             <h4 className="text-sm font-medium text-white uppercase tracking-wider mb-6">
-              Productos
+              {t.footer.columns.products}
             </h4>
             <ul className="space-y-3">
               {productLinks.map((link, index) => (
@@ -91,7 +93,7 @@ const Footer = () => {
           {/* Company Column */}
           <div>
             <h4 className="text-sm font-medium text-white uppercase tracking-wider mb-6">
-              Empresa
+              {t.footer.columns.company}
             </h4>
             <ul className="space-y-3">
               {companyLinks.map((link, index) => (
@@ -110,7 +112,7 @@ const Footer = () => {
           {/* Support Column */}
           <div>
             <h4 className="text-sm font-medium text-white uppercase tracking-wider mb-6">
-              Soporte
+              {t.footer.columns.support}
             </h4>
             <ul className="space-y-3">
               {supportLinks.map((link, index) => (
@@ -130,8 +132,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-white/40 text-sm text-center md:text-left">
-            © {new Date().getFullYear()} Vidrio AK. Todos los derechos
-            reservados.
+            © {new Date().getFullYear()} Vidrio AK. {t.footer.rights}
           </p>
 
           <div className="flex items-center gap-6">
@@ -139,13 +140,13 @@ const Footer = () => {
               href="#"
               className="text-white/40 hover:text-gold text-sm transition-colors duration-300"
             >
-              Política de Privacidad
+              {t.footer.links.privacy}
             </a>
             <a
               href="#"
               className="text-white/40 hover:text-gold text-sm transition-colors duration-300"
             >
-              Términos de Servicio
+              {t.footer.links.terms}
             </a>
           </div>
 

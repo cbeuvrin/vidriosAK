@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { X, Phone, Search, Heart, User, ShoppingBag, Instagram, Send } from 'lucide-react';
+import { X, Phone, Search, Instagram, Send } from 'lucide-react';
+import { useLanguage } from '../lib/LanguageContext';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState<'es' | 'en'>('es');
+  const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,10 +17,10 @@ const Header = () => {
   }, []);
 
   const navItems = [
-    { label: 'Inicio', href: '#hero' },
-    { label: 'Productos', href: '#products' },
-    { label: 'Nosotros', href: '#about' },
-    { label: 'Contacto', href: '#contact' },
+    { label: t.nav.home, href: '#hero' },
+    { label: t.nav.products, href: '#products' },
+    { label: t.nav.about, href: '#about' },
+    { label: t.nav.contact, href: '#contact' },
   ];
 
   const socialLinks = [
@@ -57,7 +58,7 @@ const Header = () => {
             <span className="w-6 h-px bg-white/70 group-hover:bg-gold transition-colors" />
           </div>
           <span className="text-[10px] uppercase tracking-wider text-white/50 group-hover:text-gold transition-colors mt-2">
-            Menú
+            {t.nav.menu}
           </span>
         </button>
 
@@ -73,24 +74,6 @@ const Header = () => {
               {social.icon}
             </a>
           ))}
-        </div>
-
-        {/* Language Selector */}
-        <div className="mt-auto flex flex-col gap-1 text-[10px] uppercase tracking-wider">
-          <button
-            onClick={() => setCurrentLang('es')}
-            className={`py-1 px-2 rounded transition-colors ${currentLang === 'es' ? 'text-gold bg-gold/10' : 'text-white/50 hover:text-white'
-              }`}
-          >
-            Esp
-          </button>
-          <button
-            onClick={() => setCurrentLang('en')}
-            className={`py-1 px-2 rounded transition-colors ${currentLang === 'en' ? 'text-gold bg-gold/10' : 'text-white/50 hover:text-white'
-              }`}
-          >
-            Eng
-          </button>
         </div>
       </aside>
 
@@ -112,16 +95,18 @@ const Header = () => {
             }}
             className="group relative flex items-center z-50"
           >
-            <img src="/logo-vidrio.png" alt="Vidrio AK Logo" className="h-10 lg:h-12 w-auto object-contain transition-opacity duration-300 group-hover:opacity-80 relative z-50" />
+            <div className="bg-white p-2 rounded-sm shadow-sm group-hover:bg-white/90 transition-all duration-300">
+              <img src="/logo3sk.png" alt="Vidrio AK Logo" className="h-10 lg:h-12 w-auto object-contain relative z-50" />
+            </div>
           </a>
 
           {/* Phone - Desktop */}
           <a
-            href="tel:+525500000000"
+            href="tel:5635603970"
             className="hidden lg:flex items-center gap-2 text-sm text-white/70 hover:text-gold transition-colors duration-300 ml-8"
           >
             <Phone className="w-4 h-4" />
-            <span>+52 (55) 0000 0000</span>
+            <span>56 3560 3970</span>
           </a>
 
           {/* Desktop Navigation */}
@@ -143,22 +128,34 @@ const Header = () => {
           </nav>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <button className="text-white/70 hover:text-gold transition-colors duration-300 hover:scale-110 transform">
               <Search className="w-5 h-5" />
             </button>
-            <button className="text-white/70 hover:text-gold transition-colors duration-300 hover:scale-110 transform">
-              <Heart className="w-5 h-5" />
-            </button>
-            <button className="text-white/70 hover:text-gold transition-colors duration-300 hover:scale-110 transform">
-              <User className="w-5 h-5" />
-            </button>
-            <button className="relative text-white/70 hover:text-gold transition-colors duration-300 hover:scale-110 transform">
-              <ShoppingBag className="w-5 h-5" />
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-gold text-dark text-[10px] font-bold rounded-full flex items-center justify-center">
-                0
-              </span>
-            </button>
+            
+            {/* Horizontal Language Toggle */}
+            <div className="flex items-center bg-white/5 rounded-full p-1 border border-white/10">
+              <button
+                onClick={() => setLanguage('es')}
+                className={`text-[10px] uppercase tracking-[0.2em] px-3 py-1.5 rounded-full transition-all duration-300 ${
+                  language === 'es' 
+                    ? 'bg-gold text-dark font-bold shadow-sm' 
+                    : 'text-white/50 hover:text-white'
+                }`}
+              >
+                Esp
+              </button>
+              <button
+                onClick={() => setLanguage('en')}
+                className={`text-[10px] uppercase tracking-[0.2em] px-3 py-1.5 rounded-full transition-all duration-300 ${
+                  language === 'en' 
+                    ? 'bg-gold text-dark font-bold shadow-sm' 
+                    : 'text-white/50 hover:text-white'
+                }`}
+              >
+                Eng
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -218,11 +215,11 @@ const Header = () => {
               }}
             >
               <a
-                href="tel:+525500000000"
+                href="tel:5635603970"
                 className="flex items-center gap-3 text-white/70 hover:text-gold transition-colors text-lg"
               >
                 <Phone className="w-5 h-5" />
-                <span>+52 (55) 0000 0000</span>
+                <span>56 3560 3970</span>
               </a>
             </div>
           </nav>

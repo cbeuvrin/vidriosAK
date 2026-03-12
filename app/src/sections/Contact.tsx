@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Mail, Phone, MapPin, Clock, Send, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { useLanguage } from '../lib/LanguageContext';
 
 const Contact = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -15,6 +15,7 @@ const Contact = () => {
     message: '',
   });
   const sectionRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -41,7 +42,7 @@ const Contact = () => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
     setIsSubmitting(false);
     setFormData({ name: '', email: '', phone: '', message: '' });
-    alert('Mensaje enviado correctamente. Nos pondremos en contacto contigo pronto.');
+    alert(t.contact.form.success);
   };
 
   const handleChange = (
@@ -56,26 +57,26 @@ const Contact = () => {
   const contactInfo = [
     {
       icon: <Mail className="w-5 h-5" />,
-      label: 'Email',
+      label: t.contact.info.email,
       value: 'info@vidrioak.com',
       href: 'mailto:info@vidrioak.com',
     },
     {
       icon: <Phone className="w-5 h-5" />,
-      label: 'Teléfono',
-      value: '+52 (55) 0000 0000',
-      href: 'tel:+525500000000',
+      label: t.contact.info.phone,
+      value: '56 3560 3970',
+      href: 'tel:5635603970',
     },
     {
       icon: <MapPin className="w-5 h-5" />,
-      label: 'Dirección',
-      value: 'Zona Centro, Ciudad de México',
+      label: t.contact.info.address,
+      value: t.contact.info.addressValue,
       href: '#',
     },
     {
       icon: <Clock className="w-5 h-5" />,
-      label: 'Horario',
-      value: 'Lun - Vie: 9:00 - 18:00',
+      label: t.contact.info.hours,
+      value: t.contact.info.hoursValue,
       href: '#',
     },
   ];
@@ -108,7 +109,7 @@ const Contact = () => {
               }`}
             >
               <span className="text-xs tracking-[0.3em] uppercase text-gold">
-                Contáctanos
+                {t.contact.badge}
               </span>
             </div>
 
@@ -120,8 +121,8 @@ const Contact = () => {
               }`}
               style={{ transitionDelay: '200ms' }}
             >
-              Protege lo que más{' '}
-              <span className="text-gold">valoras</span>
+              {t.contact.title}{' '}
+              <span className="text-gold">{t.contact.titleHighlight}</span>
             </h2>
 
             <p
@@ -132,9 +133,7 @@ const Contact = () => {
               }`}
               style={{ transitionDelay: '300ms' }}
             >
-              Contáctanos hoy mismo para una cotización personalizada. Nuestro
-              equipo de expertos está listo para ayudarte a encontrar la mejor
-              solución en vidrio para tu proyecto.
+              {t.contact.description}
             </p>
 
             {/* Contact Info */}
@@ -181,13 +180,13 @@ const Contact = () => {
               className="glass rounded-sm p-8 lg:p-10"
             >
               <h3 className="text-xl font-medium text-white mb-6">
-                Solicita una cotización
+                {t.contact.form.legend}
               </h3>
 
               <div className="space-y-5">
                 <div>
                   <Label htmlFor="name" className="text-white/70 text-sm mb-2 block">
-                    Nombre
+                    {t.contact.form.name}
                   </Label>
                   <Input
                     id="name"
@@ -197,14 +196,14 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-gold focus:ring-gold/20"
-                    placeholder="Tu nombre completo"
+                    placeholder={t.contact.form.namePlaceholder}
                   />
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <Label htmlFor="email" className="text-white/70 text-sm mb-2 block">
-                      Email
+                      {t.contact.form.email}
                     </Label>
                     <Input
                       id="email"
@@ -214,12 +213,12 @@ const Contact = () => {
                       onChange={handleChange}
                       required
                       className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-gold focus:ring-gold/20"
-                      placeholder="tu@email.com"
+                      placeholder={t.contact.form.emailPlaceholder}
                     />
                   </div>
                   <div>
                     <Label htmlFor="phone" className="text-white/70 text-sm mb-2 block">
-                      Teléfono
+                      {t.contact.form.phone}
                     </Label>
                     <Input
                       id="phone"
@@ -228,24 +227,24 @@ const Contact = () => {
                       value={formData.phone}
                       onChange={handleChange}
                       className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-gold focus:ring-gold/20"
-                      placeholder="+52 (55) 0000 0000"
+                      placeholder={t.contact.form.phonePlaceholder}
                     />
                   </div>
                 </div>
 
                 <div>
                   <Label htmlFor="message" className="text-white/70 text-sm mb-2 block">
-                    Mensaje
+                    {t.contact.form.message}
                   </Label>
-                  <Textarea
+                  <textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
                     required
                     rows={4}
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-gold focus:ring-gold/20 resize-none"
-                    placeholder="Cuéntanos sobre tu proyecto..."
+                    className="w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/30 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold/20 resize-none"
+                    placeholder={t.contact.form.messagePlaceholder}
                   />
                 </div>
 
@@ -257,11 +256,11 @@ const Contact = () => {
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
                       <span className="w-4 h-4 border-2 border-dark/30 border-t-dark rounded-full animate-spin" />
-                      Enviando...
+                      {t.contact.form.sending}
                     </span>
                   ) : (
                     <span className="flex items-center gap-2">
-                      Enviar Mensaje
+                      {t.contact.form.submit}
                       <Send className="w-4 h-4" />
                     </span>
                   )}

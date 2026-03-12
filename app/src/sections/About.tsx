@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLanguage } from '../lib/LanguageContext';
 
 interface CounterProps {
   end: number;
@@ -36,7 +37,7 @@ const Counter = ({ end, suffix, label, isVisible }: CounterProps) => {
         {count}
         <span className="text-2xl lg:text-3xl">{suffix}</span>
       </div>
-      <div className="text-sm text-white/60 uppercase tracking-wider">
+      <div className="text-sm text-white/60 uppercase tracking-wider leading-tight">
         {label}
       </div>
     </div>
@@ -46,6 +47,7 @@ const Counter = ({ end, suffix, label, isVisible }: CounterProps) => {
 const About = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -66,9 +68,9 @@ const About = () => {
   }, []);
 
   const stats = [
-    { end: 18, suffix: '+', label: 'Años de experiencia' },
-    { end: 100, suffix: '%', label: 'Seguridad garantizada' },
-    { end: 500, suffix: '+', label: 'Proyectos completados' },
+    { end: 18, suffix: '+', label: t.about.yearsExp },
+    { end: 500, suffix: '+', label: t.about.projects },
+    { end: 25, suffix: '+', label: t.about.team },
   ];
 
   return (
@@ -111,7 +113,7 @@ const About = () => {
               style={{ transitionDelay: '200ms' }}
             >
               <span className="text-xs tracking-[0.3em] uppercase text-gold">
-                Nuestra Historia
+                {t.about.badge}
               </span>
             </div>
 
@@ -124,9 +126,8 @@ const About = () => {
               }`}
               style={{ transitionDelay: '400ms' }}
             >
-              We love what we do.
-              <br />
-              <span className="text-gold">Our mission</span>
+              {t.about.title1} <br />
+              <span className="text-gold italic font-serif ">{t.about.titleHighlight}</span> {t.about.title2}
             </h2>
 
             {/* Body Text */}
@@ -138,18 +139,11 @@ const About = () => {
               }`}
               style={{ transitionDelay: '600ms' }}
             >
-              <p className="text-white/70 leading-relaxed">
-                Vidrio AK, fábrica de vidrio blindado y arquitectónico es una
-                empresa mexicana fundada en el año 2005, contando así con 18
-                años de experiencia, cuyo principal objetivo es satisfacer
-                necesidades en fabricación de vidrio blindado o laminado para
-                proyectos automotrices y de construcción.
+              <p className="text-white/70 leading-relaxed text-lg font-light">
+                {t.about.text1}
               </p>
-              <p className="text-white/70 leading-relaxed">
-                Utilizamos insumos importados de la mejor calidad y tecnologías
-                de vanguardia desarrolladas en nuestro laboratorio de pruebas.
-                Las instituciones más prestigiadas del país han sido testigos de
-                la experiencia y profesionalismo de Vidrio AK.
+              <p className="text-white/60 leading-relaxed font-light italic">
+                {t.about.text2}
               </p>
             </div>
 

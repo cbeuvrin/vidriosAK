@@ -5,11 +5,14 @@ import Products from './sections/Products';
 import Features from './sections/Features';
 import Contact from './sections/Contact';
 import Footer from './sections/Footer';
+import FloatingWhatsApp from './components/FloatingWhatsApp';
+import { LanguageProvider } from './lib/LanguageContext';
 import './App.css';
 
 function App() {
   return (
-    <div className="min-h-screen bg-dark text-white overflow-x-hidden">
+    <LanguageProvider>
+      <div className="min-h-screen bg-dark text-white overflow-x-hidden">
       <Header />
       <main className="ml-16 lg:ml-20">
         <Hero />
@@ -19,7 +22,9 @@ function App() {
         <Contact />
       </main>
       <Footer />
-    </div>
+      <FloatingWhatsApp />
+      </div>
+    </LanguageProvider>
   );
 }
 

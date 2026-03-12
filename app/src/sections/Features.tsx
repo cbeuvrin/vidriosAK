@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Cpu, Package, Award } from 'lucide-react';
+import { useLanguage } from '../lib/LanguageContext';
 
 interface Feature {
   icon: React.ReactNode;
@@ -10,6 +11,7 @@ interface Feature {
 const Features = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -32,21 +34,18 @@ const Features = () => {
   const features: Feature[] = [
     {
       icon: <Cpu className="w-8 h-8" />,
-      title: 'Tecnología de Vanguardia',
-      description:
-        'Laboratorio de pruebas propio con equipos importados de última generación para garantizar la máxima calidad.',
+      title: t.features.items[0].title,
+      description: t.features.items[0].description,
     },
     {
       icon: <Package className="w-8 h-8" />,
-      title: 'Materiales Premium',
-      description:
-        'Insumos importados de las mejores marcas internacionales. La mejor relación calidad-precio del mercado.',
+      title: t.features.items[1].title,
+      description: t.features.items[1].description,
     },
     {
       icon: <Award className="w-8 h-8" />,
-      title: 'Certificaciones Internacionales',
-      description:
-        'Cumplimos con los más altos estándares de calidad y seguridad a nivel nacional e internacional.',
+      title: t.features.items[2].title,
+      description: t.features.items[2].description,
     },
   ];
 
@@ -71,7 +70,7 @@ const Features = () => {
             }`}
           >
             <span className="text-xs tracking-[0.3em] uppercase text-gold">
-              Por Qué Elegirnos
+              {t.features.badge}
             </span>
           </div>
           <h2
@@ -82,7 +81,7 @@ const Features = () => {
             }`}
             style={{ transitionDelay: '200ms' }}
           >
-            Excelencia en cada <span className="text-gold">detalle</span>
+            {t.features.title} <span className="text-gold">{t.features.titleHighlight}</span>
           </h2>
         </div>
 
@@ -141,11 +140,7 @@ const Features = () => {
           style={{ transitionDelay: '800ms' }}
         >
           <p className="text-white/70 leading-relaxed">
-            Nuestra planta de producción se encuentra en la zona centro de la
-            Ciudad de México, diseñada para cumplir con los más altos estándares
-            y regulaciones en materia de calidad, seguridad y tecnología. Nuestro
-            proceso de fabricación inicia con la compra de los mejores materiales
-            en acuerdo comercial con las mejores marcas a nivel internacional.
+            {t.features.detailedInfo}
           </p>
         </div>
       </div>
